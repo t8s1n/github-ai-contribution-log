@@ -1,8 +1,11 @@
 # Contribution #1: Missing definitions for `Proc#<<` and `Proc#>>`
 
 **Contribution Number:** 1
+
 **Student:** Jesse Oseafiana
+
 **Issue:** https://github.com/sorbet/sorbet/issues/9656
+
 **Status:** Phase III Complete
 
 ---

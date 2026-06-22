@@ -365,7 +365,7 @@ The type decision took more thought than I expected for an otherwise small fix. 
 
 ### What I'd Do Differently Next Time
 
-Join the project Slack before starting, since CONTRIBUTING.md is clear the expected flow is Slack intro then PR. I'd also check sibling RBI files earlier: I initially assumed `rbi/core/method.rbi` might have the same gap, but it turns out `Method#<<` and `Method#>>` are already defined there. That was actually the most useful thing I found, because it gave me the exact typing precedent (`T.untyped`) to mirror, instead of guessing at the argument type. Checking neighboring files for an accepted pattern should be the first step, not an afterthought.
+Engage with the project earlier through the channels CONTRIBUTING.md points to (it recommends starting a conversation on Slack, though contributing through the issue is also fine). I would also check sibling RBI files earlier: I initially assumed `rbi/core/method.rbi` might have the same gap, but it turns out `Method#<<` and `Method#>>` are already defined there. That was actually the most useful thing I found, because it gave me the exact typing precedent (`T.untyped`) to mirror, instead of guessing at the argument type. Checking neighboring files for an accepted pattern should be the first step, not an afterthought.
 
 ---
 

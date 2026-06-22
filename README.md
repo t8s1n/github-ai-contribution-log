@@ -3,7 +3,7 @@
 **Contribution Number:** 1
 **Student:** Jesse Oseafiana
 **Issue:** https://github.com/sorbet/sorbet/issues/9656
-**Status:** Phase III In Progress
+**Status:** Phase III Complete
 
 ---
 
@@ -319,7 +319,7 @@ Commit follows the repo's convention (short imperative subject, no Conventional-
 
 - **Files modified:** `rbi/core/proc.rbi` (added the two `sig` + `def` blocks), `test/testdata/rbi/proc.rb` (regression test).
 - **Branch:** https://github.com/t8s1n/sorbet/tree/fix-issue-9656
-- **Key commit(s):** [paste `git log --oneline` SHA after committing, e.g. `Add sigs for Proc#<< and Proc#>>`]
+- **Key commit(s):** `59f2c19a4`, "Add sigs for Proc#<< and Proc#>>" (2 files changed, 30 insertions: `rbi/core/proc.rbi` and `test/testdata/rbi/proc.rb`)
 - **Draft PR:** [add the PR URL here once opened]
 - **Approach decisions:** Argument and return both typed as `T.untyped`, mirroring the existing `Method#<<` / `Method#>>` definitions in `method.rbi`. Considered `Proc`/`Proc` (stricter, also typechecks) but chose consistency with the accepted sibling precedent. Documented in the PR.
 
@@ -327,22 +327,24 @@ Commit follows the repo's convention (short imperative subject, no Conventional-
 
 ## Pull Request
 
-**PR Link:** [To be added in Phase III]
+**PR Title:** Add sigs for Proc#<< and Proc#>>
 
-**PR Description (draft):**
+**PR Description (final):**
 
 > Fixes #9656
 >
-> Adds missing RBI definitions for `Proc#<<` and `Proc#>>`, which were introduced in Ruby 2.6.0 but never added to `rbi/core/proc.rbi`.
+> `Proc#<<` and `Proc#>>` are the function-composition operators added in Ruby 2.6.0. They were never added to `rbi/core/proc.rbi`, so Sorbet reports false "Method does not exist" errors (7003) on valid code and even suggests the unrelated `Module#<` / `Module#>` operators.
 >
-> Both the argument and the return are typed as `T.untyped`, matching the existing `Method#<<` and `Method#>>` definitions in `rbi/core/method.rbi` for the same composition operators. This keeps `Proc` and `Method` consistent and correctly allows the non-Proc callables (`Method`, etc.) that Ruby accepts at runtime.
+> This adds both methods to `rbi/core/proc.rbi`, typed `sig {params(g: T.untyped).returns(T.untyped)}` to match the existing `Method#<<` / `Method#>>` definitions in `rbi/core/method.rbi` for the same operators on a sibling callable class. `T.untyped` also correctly allows the non-Proc callables (a `Method`, or anything responding to `call`) that Ruby accepts at runtime.
 >
-> Verified locally: the repro from the issue now typechecks cleanly, and the documented runtime results (`(f << g).call(2) #=> 16`, `(f >> g).call(2) #=> 8`) check out.
+> I also added a small regression test to `test/testdata/rbi/proc.rb`: two composition calls with no error annotation, which fail today (methods missing) and pass with this change.
+>
+> Verified locally with the published sorbet gem (0.6.13308): the repro from the issue typechecks cleanly with the new sigs, and the documented runtime results hold (`(f << g).call(2) #=> 16`, `(f >> g).call(2) #=> 8`).
 
 **Maintainer Feedback:**
 - [Pending]
 
-**Status:** Not yet opened
+**Status:** Draft PR pending (branch pushed; opening after Slack intro)
 
 ---
 
